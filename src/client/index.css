@@ -1,7 +1,11 @@
+/* ─── Google Fonts (must be first) ─────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ─── App (Internal Dashboard) Design Tokens ───────────────── */
 :root {
   --background: 0 0% 100%;
   --foreground: 222 47% 11%;
@@ -19,7 +23,154 @@
   --destructive-foreground: 0 0% 100%;
   --border: 214 32% 91%;
   --radius: 0.5rem;
+
+  /* ─── Public Homepage Brand Colors ─────────────────────── */
+  --forest-900: #0d2818;
+  --forest-800: #1a4731;
+  --forest-700: #1f5c3e;
+  --forest-600: #2d7a4f;
+  --forest-500: #3a9e68;
+  --forest-400: #52c27d;
+  --forest-300: #7dd99a;
+  --forest-200: #b8edca;
+  --forest-100: #e0f7ea;
+  --forest-50:  #f0fdf6;
+
+  --earth-900: #451a03;
+  --earth-700: #92400e;
+  --earth-500: #b45309;
+  --earth-300: #d97706;
+  --earth-100: #fef3c7;
+
+  --sun-500: #f59e0b;
+  --sun-400: #fbbf24;
+  --sun-300: #fcd34d;
+
+  --warm-white: #fafaf7;
+  --off-white:  #f5f5f0;
 }
 
 * { border-color: hsl(var(--border)); }
-body { background: hsl(var(--background)); color: hsl(var(--foreground)); }
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ─── Homepage Typography ───────────────────────────────────── */
+.font-display { font-family: 'Outfit', 'Inter', sans-serif; }
+
+/* ─── Keyframe Animations ───────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes floatDown {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(10px); }
+}
+
+@keyframes marqueeLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(45, 122, 79, 0.4); }
+  70%  { transform: scale(1);    box-shadow: 0 0 0 10px rgba(45, 122, 79, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(45, 122, 79, 0); }
+}
+
+@keyframes dropFall {
+  0%   { transform: translateY(-8px) scale(1);   opacity: 0; }
+  40%  { opacity: 0.7; }
+  80%  { transform: translateY(12px) scale(0.8); opacity: 0.4; }
+  100% { transform: translateY(20px) scale(0.5); opacity: 0; }
+}
+
+@keyframes lineGrow {
+  from { stroke-dashoffset: 1000; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to   { background-position: 200% center; }
+}
+
+/* ─── Animation Utility Classes ────────────────────────────── */
+.animate-fade-up    { animation: fadeUp 0.7s ease forwards; }
+.animate-fade-in    { animation: fadeIn 0.6s ease forwards; }
+.animate-float-up   { animation: floatUp 3.5s ease-in-out infinite; }
+.animate-float-down { animation: floatDown 4s ease-in-out infinite; }
+.animate-marquee    { animation: marqueeLeft 28s linear infinite; }
+.animate-drop       { animation: dropFall 2.5s ease-in infinite; }
+
+/* ─── Scroll Reveal ─────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Glass Effect ──────────────────────────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+  background: rgba(26, 71, 49, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ─── Homepage-specific overrides ───────────────────────────── */
+.homepage-section {
+  padding: 5rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .homepage-section { padding: 6rem 2rem; }
+}
+
+@media (min-width: 1280px) {
+  .homepage-section { padding: 7rem 0; }
+}
+
+/* ─── Gradient Text ─────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--forest-700), var(--forest-500));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Horizontal Scroll Hide Scrollbar ──────────────────────── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ─── SVG Line animation ────────────────────────────────────── */
+.flow-line {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  transition: stroke-dashoffset 1.5s ease;
+}
+.flow-line.active { stroke-dashoffset: 0; }

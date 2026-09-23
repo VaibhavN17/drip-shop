@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { AppLayout } from "@/components/layout/AppLayout";
 
+import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/Login";
 import DashboardPage from "@/pages/Dashboard";
 import CustomersPage from "@/pages/Customers";
@@ -22,7 +23,12 @@ import SettingsPage from "@/pages/Settings";
 
 function RequireAuth({ children }: { children: React.ReactElement }) {
   const { user, loading } = useAuth();
-  if (loading) return <div className="flex h-screen items-center justify-center text-muted-foreground">Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex h-screen items-center justify-center text-muted-foreground">
+        Loading...
+      </div>
+    );
   if (!user) return <Navigate to="/login" replace />;
   return children;
 }
@@ -30,31 +36,38 @@ function RequireAuth({ children }: { children: React.ReactElement }) {
 export default function App() {
   return (
     <Routes>
+      {/* ── Public Routes ── */}
+      <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
+
+      {/* ── Protected App Routes ── */}
       <Route
+        path="/app"
         element={
           <RequireAuth>
             <AppLayout />
           </RequireAuth>
         }
       >
-        <Route path="/" element={<DashboardPage />} />
-        <Route path="/customers" element={<CustomersPage />} />
-        <Route path="/customers/:id" element={<CustomerDetailPage />} />
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/categories" element={<CategoriesPage />} />
-        <Route path="/government-rates" element={<GovernmentRatesPage />} />
-        <Route path="/quotations" element={<QuotationsPage />} />
-        <Route path="/quotations/new" element={<QuotationBuilderPage />} />
-        <Route path="/quotations/:id" element={<QuotationDetailPage />} />
-        <Route path="/quotations/:id/edit" element={<QuotationBuilderPage />} />
-        <Route path="/invoices" element={<InvoicesPage />} />
-        <Route path="/invoices/:id" element={<InvoiceDetailPage />} />
-        <Route path="/payments" element={<PaymentsPage />} />
-        <Route path="/reports" element={<ReportsPage />} />
-        <Route path="/users" element={<UsersPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route index element={<DashboardPage />} />
+        <Route path="customers" element={<CustomersPage />} />
+        <Route path="customers/:id" element={<CustomerDetailPage />} />
+        <Route path="products" element={<ProductsPage />} />
+        <Route path="categories" element={<CategoriesPage />} />
+        <Route path="government-rates" element={<GovernmentRatesPage />} />
+        <Route path="quotations" element={<QuotationsPage />} />
+        <Route path="quotations/new" element={<QuotationBuilderPage />} />
+        <Route path="quotations/:id" element={<QuotationDetailPage />} />
+        <Route path="quotations/:id/edit" element={<QuotationBuilderPage />} />
+        <Route path="invoices" element={<InvoicesPage />} />
+        <Route path="invoices/:id" element={<InvoiceDetailPage />} />
+        <Route path="payments" element={<PaymentsPage />} />
+        <Route path="reports" element={<ReportsPage />} />
+        <Route path="users" element={<UsersPage />} />
+        <Route path="settings" element={<SettingsPage />} />
       </Route>
+
+      {/* ── Fallback ── */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

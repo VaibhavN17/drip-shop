@@ -10,17 +10,17 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { to: "/", icon: LayoutDashboard, label: "dashboard" as const, end: true },
-  { to: "/customers", icon: Users, label: "customers" as const },
-  { to: "/products", icon: Package, label: "products" as const },
-  { to: "/categories", icon: Tags, label: "categories" as const },
-  { to: "/government-rates", icon: Landmark, label: "governmentRates" as const },
-  { to: "/quotations", icon: FileText, label: "quotations" as const },
-  { to: "/invoices", icon: Receipt, label: "invoices" as const },
-  { to: "/payments", icon: Wallet, label: "payments" as const },
-  { to: "/reports", icon: BarChart3, label: "reports" as const },
-  { to: "/users", icon: UserCog, label: "users" as const },
-  { to: "/settings", icon: SettingsIcon, label: "settings" as const },
+  { to: "/app",                 icon: LayoutDashboard, label: "dashboard"      as const, end: true },
+  { to: "/app/customers",       icon: Users,           label: "customers"      as const },
+  { to: "/app/products",        icon: Package,         label: "products"       as const },
+  { to: "/app/categories",      icon: Tags,            label: "categories"     as const },
+  { to: "/app/government-rates",icon: Landmark,        label: "governmentRates"as const },
+  { to: "/app/quotations",      icon: FileText,        label: "quotations"     as const },
+  { to: "/app/invoices",        icon: Receipt,         label: "invoices"       as const },
+  { to: "/app/payments",        icon: Wallet,          label: "payments"       as const },
+  { to: "/app/reports",         icon: BarChart3,       label: "reports"        as const },
+  { to: "/app/users",           icon: UserCog,         label: "users"          as const },
+  { to: "/app/settings",        icon: SettingsIcon,    label: "settings"       as const },
 ];
 
 export function AppLayout() {
@@ -31,7 +31,7 @@ export function AppLayout() {
 
   async function handleLogout() {
     await logout();
-    navigate("/login");
+    navigate("/");
   }
 
   return (
