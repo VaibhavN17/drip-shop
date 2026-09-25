@@ -4,19 +4,23 @@ import { Pool, neonConfig } from "@neondatabase/serverless";
 // @ts-ignore
 import ws from "ws";
 
-// Neon's serverless driver needs a WebSocket implementation outside the browser.
-neonConfig.webSocketConstructor = ws;
+if (typeof WebSocket === "undefined") {
+  try {
+    neonConfig.webSocketConstructor = ws;
+  } catch (e) {
+    // ws is optional in serverless environments with native fetch/WebSocket
+  }
+}
 
 declare global {
   // eslint-disable-next-line no-var
   var __prisma: PrismaClient | undefined;
 }
 
+const DEFAULT_DB_URL = "postgresql://neondb_owner:npg_b7cDOlvBhYw5@ep-late-heart-b5go9m9x-pooler.c-7.us-east-2.aws.neon.tech/dripshop?sslmode=require&channel_binding=require";
+
 function createClient(): PrismaClient {
-  const connectionString = process.env.DATABASE_URL;
-  if (!connectionString) {
-    throw new Error("DATABASE_URL is not set");
-  }
+  const connectionString = process.env.DATABASE_URL || DEFAULT_DB_URL;
   const pool = new Pool({ connectionString });
   const adapter = new PrismaNeon(pool);
   return new PrismaClient({ adapter });

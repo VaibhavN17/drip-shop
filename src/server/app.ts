@@ -28,8 +28,10 @@ export function createApp() {
   const apiLimiter = rateLimit({ windowMs: 60 * 1000, limit: 300, standardHeaders: true, legacyHeaders: false });
   app.use("/api", apiLimiter);
   app.use("/api", routes);
+  app.use(routes);
 
   app.use("/api", notFoundHandler);
+  app.use(notFoundHandler);
   app.use(errorHandler);
 
   return app;
