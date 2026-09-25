@@ -1,11 +1,145 @@
 import type { Response, NextFunction } from "express";
 import { prisma } from "@server/db/client";
-import { invoiceUpdateSchema, paginationSchema } from "@server/validators/schemas";
+import { invoiceCreateSchema, invoiceUpdateSchema, paginationSchema } from "@server/validators/schemas";
+import { generateInvoiceNumber, generateCustomerCode } from "@server/services/numbering.service";
 import { calculateGst } from "@server/services/subsidy.service";
 import { AppError } from "@server/utils/errors";
-import { ok } from "@server/utils/response";
+import { ok, created } from "@server/utils/response";
 import { audit } from "@server/middleware/audit";
 import type { AuthedRequest } from "@server/middleware/auth";
+
+async function getInvoicePrefix() {
+  const settings = await prisma.shopSettings.findFirst();
+  return settings?.invoicePrefix ?? "INV";
+}
+
+async function resolveCustomerId(input: { customerId?: string | null; customer?: any; userId?: string }): Promise<string> {
+  if (input.customerId) return input.customerId;
+  if (!input.customer) throw AppError.badRequest("Customer details required");
+
+  const existing = await prisma.customer.findFirst({ where: { mobile: input.customer.mobile } });
+  if (existing) return existing.id;
+
+  const customerCode = await generateCustomerCode();
+  const aadhar = input.customer.aadhar?.replace(/\s+/g, "");
+  const createdCust = await prisma.customer.create({
+    data: {
+      customerCode,
+      fullName: input.customer.fullName,
+      mobile: input.customer.mobile,
+      village: input.customer.village ?? null,
+      taluka: input.customer.taluka ?? null,
+      district: input.customer.district ?? null,
+      surveyNumber: input.customer.surveyNumber ?? null,
+      gatNumber: input.customer.gatNumber ?? null,
+      landArea: input.customer.landArea ? Number(input.customer.landArea) : null,
+      crop: input.customer.crop ?? null,
+      aadhaarLast4: aadhar && aadhar.length >= 4 ? aadhar.slice(-4) : null,
+      notes: input.customer.aadhar ? `Aadhaar: ${input.customer.aadhar}` : null,
+      createdById: input.userId,
+    },
+  });
+  return createdCust.id;
+}
+
+export async function create(req: AuthedRequest, res: Response, next: NextFunction) {
+  try {
+    const data = invoiceCreateSchema.parse(req.body);
+    const prefix = await getInvoicePrefix();
+    const invoiceNumber = await generateInvoiceNumber(prefix);
+
+    const customerId = await resolveCustomerId({
+      customerId: data.customerId,
+      customer: data.customer,
+      userId: req.user?.id,
+    });
+
+    const isInterstate = Boolean(data.isInterstate);
+    let subtotal = 0;
+    const computedItems = data.items.map((it, idx) => {
+      const taxable = it.taxableValue ?? Math.round(Number(it.quantity) * Number(it.rate) * 100) / 100;
+      subtotal += taxable;
+      const itGst = calculateGst(taxable, Number(it.gstRate ?? data.gstRate), isInterstate);
+      const itTotal = Math.round((taxable + itGst.gstAmount + Number.EPSILON) * 100) / 100;
+      return {
+        productId: it.productId ?? null,
+        description: it.description,
+        hsnCode: it.hsnCode || it.cmlNo || null,
+        quantity: it.quantity,
+        unit: it.unit || "Nos",
+        rate: it.rate,
+        taxableValue: taxable,
+        gstRate: it.gstRate ?? data.gstRate,
+        cgstAmount: itGst.cgst,
+        sgstAmount: itGst.sgst,
+        igstAmount: itGst.igst,
+        totalAmount: itTotal,
+        sortOrder: idx,
+      };
+    });
+
+    const discount = Number(data.discount ?? 0);
+    const installation = Number(data.installation ?? 0);
+    const taxableBase = Math.max(0, subtotal - discount + installation);
+    const overallGst = calculateGst(taxableBase, Number(data.gstRate), isInterstate);
+    const rawTotal = taxableBase + overallGst.gstAmount;
+    const roundedTotal = Math.round(rawTotal);
+    const roundOff = Math.round((roundedTotal - rawTotal + Number.EPSILON) * 100) / 100;
+
+    // Metadata note
+    const metaParts: string[] = [];
+    if (data.setType) metaParts.push(`संच प्रकार: ${data.setType}`);
+    if (data.spacing) metaParts.push(`लागवडीचे अंतर: ${data.spacing}`);
+    if (data.shiwar) metaParts.push(`शिवार: ${data.shiwar}`);
+    if (installation > 0) metaParts.push(`इन्स्टॉलेशन: ₹${installation}`);
+    if (data.notes) metaParts.push(data.notes);
+    const finalNotes = metaParts.join(" | ");
+
+    const invoice = await prisma.$transaction(async (tx) => {
+      const inv = await tx.invoice.create({
+        data: {
+          invoiceNumber,
+          customerId,
+          quotationId: data.quotationId ?? null,
+          invoiceDate: data.invoiceDate ?? new Date(),
+          subtotal,
+          cgst: overallGst.cgst,
+          sgst: overallGst.sgst,
+          igst: overallGst.igst,
+          gstRate: data.gstRate,
+          gstAmount: overallGst.gstAmount,
+          discount,
+          roundOff,
+          totalAmount: roundedTotal,
+          paidAmount: 0,
+          balanceAmount: roundedTotal,
+          paymentStatus: "UNPAID",
+          isInterstate,
+          notes: finalNotes || null,
+          createdById: req.user?.id,
+          items: {
+            create: computedItems,
+          },
+        },
+        include: { items: true, customer: true },
+      });
+
+      if (data.quotationId) {
+        await tx.quotation.update({
+          where: { id: data.quotationId },
+          data: { status: "CONVERTED" },
+        });
+      }
+
+      return inv;
+    });
+
+    await audit(req, "invoice_created", "invoice", invoice.id, { invoiceNumber });
+    return created(res, invoice);
+  } catch (err) {
+    next(err);
+  }
+}
 
 export async function list(req: AuthedRequest, res: Response, next: NextFunction) {
   try {

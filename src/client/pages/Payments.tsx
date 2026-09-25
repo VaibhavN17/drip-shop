@@ -33,7 +33,7 @@ export default function PaymentsPage() {
         <TBody>
           {data?.map((inv) => (
             <TR key={inv.id}>
-              <TD><Link to={`/invoices/${inv.id}`} className="font-medium text-primary hover:underline">{inv.invoiceNumber}</Link></TD>
+              <TD><Link to={`/admin/invoices/${inv.id}`} className="font-medium text-primary hover:underline">{inv.invoiceNumber}</Link></TD>
               <TD>{inv.customer.fullName} · {inv.customer.mobile}</TD>
               <TD>{formatDate(inv.invoiceDate)}</TD>
               <TD>{formatInr(inv.totalAmount)}</TD>

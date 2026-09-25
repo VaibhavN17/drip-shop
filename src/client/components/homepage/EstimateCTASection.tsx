@@ -1,95 +1,104 @@
-import React from "react";
+﻿import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ChevronRight, Package, Hash, FileText, BadgePercent, IndianRupee } from "lucide-react";
+import { ClipboardList, Package, Calculator, FileDown, ArrowRight } from "lucide-react";
 
-const pipeline = [
-  { icon: Package,       label: "Products",     color: "var(--forest-600)" },
-  { icon: Hash,          label: "Quantity",     color: "var(--forest-500)" },
-  { icon: FileText,      label: "Estimate",     color: "#3b82f6" },
-  { icon: BadgePercent,  label: "Subsidy",      color: "var(--earth-500)" },
-  { icon: IndianRupee,   label: "Final Amount", color: "var(--forest-700)" },
+const flow = [
+  { icon: Package,       step: "उत्पादने निवडा",  sub: "Select Products" },
+  { icon: Calculator,    step: "प्रमाण टाका",      sub: "Enter Quantities" },
+  { icon: ClipboardList, step: "अंदाज तयार करा",   sub: "Generate Estimate" },
+  { icon: FileDown,      step: "PDF मिळवा",        sub: "Download PDF" },
 ];
 
 export function EstimateCTASection() {
   const navigate = useNavigate();
-
   return (
-    <section className="homepage-section" style={{ background: "var(--warm-white)" }}>
-      <div className="max-w-5xl mx-auto">
-        <div
-          className="rounded-3xl p-8 md:p-14 text-center shadow-xl overflow-hidden relative"
-          style={{ background: "white", border: "1px solid var(--forest-100)" }}
+    <section
+      id="estimate"
+      className="py-20"
+      style={{ background: "#fffdf7" }}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-3xl shadow-2xl"
+          style={{ background: "linear-gradient(135deg, #1c0a0a 0%, #3b0d0d 60%, #7f1d1d 100%)" }}
         >
-          {/* Decorative blobs */}
-          <div
-            className="absolute -top-24 -right-24 w-64 h-64 rounded-full opacity-10"
-            style={{ background: "radial-gradient(circle, var(--forest-400), transparent)" }}
-          />
-          <div
-            className="absolute -bottom-24 -left-24 w-64 h-64 rounded-full opacity-10"
-            style={{ background: "radial-gradient(circle, var(--sun-400), transparent)" }}
-          />
+          {/* Decorative */}
+          <div className="absolute -right-20 -top-20 w-96 h-96 rounded-full opacity-10" style={{ background: "#fbbf24" }} />
+          <div className="absolute -left-10 -bottom-10 w-64 h-64 rounded-full opacity-8" style={{ background: "#b91c1c" }} />
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="relative z-10"
-          >
-            <span
-              className="inline-block px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-5"
-              style={{ background: "var(--forest-100)", color: "var(--forest-700)" }}
-            >
-              💧 Estimate Builder
-            </span>
+          <div className="relative z-10 p-10 lg:p-14">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Left */}
+              <div>
+                <motion.div
+                  initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+                  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold mb-5 tracking-widest uppercase"
+                  style={{ background: "rgba(251,191,36,0.15)", border: "1px solid rgba(251,191,36,0.35)", color: "#fbbf24" }}
+                >
+                  📋 ऑनलाईन अंदाज सेवा
+                </motion.div>
 
-            <h2 className="font-display font-black text-3xl sm:text-4xl text-gray-900 mb-4">
-              Need an Irrigation Estimate?
-            </h2>
-            <p className="text-gray-500 text-lg mb-10 max-w-xl mx-auto">
-              Tell us what you need. We'll help you build a detailed estimate with products, quantities, and applicable subsidy — in minutes.
-            </p>
+                <motion.h2
+                  initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
+                  className="font-black text-3xl sm:text-4xl text-white leading-tight mb-4"
+                >
+                  आता अंदाज मिळवा
+                  <span className="block text-xl sm:text-2xl mt-1 font-semibold" style={{ color: "#fbbf24" }}>
+                    Get Your Free Irrigation Estimate
+                  </span>
+                </motion.h2>
 
-            {/* Pipeline steps */}
-            <div className="flex items-center justify-center gap-0 mb-10 flex-wrap">
-              {pipeline.map((step, i) => {
-                const Icon = step.icon;
-                return (
-                  <React.Fragment key={step.label}>
+                <motion.p
+                  initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
+                  className="text-base leading-relaxed mb-8"
+                  style={{ color: "rgba(255,255,255,0.7)" }}
+                >
+                  आपल्या शेतीसाठी लागणाऱ्या ड्रिप साहित्याचा अंदाज ऑनलाईन तयार करा.
+                  सरकारी दरात, PDF स्वरूपात — झटपट.
+                </motion.p>
+
+                <motion.button
+                  initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}
+                  onClick={() => navigate("/admin/login")}
+                  className="group inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-bold transition-all hover:scale-105 shadow-2xl"
+                  style={{ background: "#fbbf24", color: "#1c0a0a" }}
+                >
+                  अंदाज तयार करा / Start Estimate
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </motion.button>
+              </div>
+
+              {/* Right — flow */}
+              <div className="flex flex-col sm:flex-row lg:flex-col gap-3">
+                {flow.map((f, i) => {
+                  const Icon = f.icon;
+                  return (
                     <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
+                      key={f.step}
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
-                      transition={{ delay: i * 0.1 }}
-                      className="flex flex-col items-center gap-2"
+                      transition={{ delay: 0.08 * i }}
+                      className="flex items-center gap-4 rounded-2xl px-5 py-4"
+                      style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}
                     >
-                      <div
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm"
-                        style={{ background: `${step.color}12`, border: `2px solid ${step.color}25` }}
-                      >
-                        <Icon size={20} style={{ color: step.color }} />
+                      <div className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
+                        style={{ background: "rgba(251,191,36,0.15)", border: "1px solid rgba(251,191,36,0.3)" }}>
+                        <Icon size={18} style={{ color: "#fbbf24" }} />
                       </div>
-                      <span className="text-xs font-semibold text-gray-600 whitespace-nowrap">{step.label}</span>
+                      <div>
+                        <div className="text-white font-semibold text-sm">{f.step}</div>
+                        <div className="text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>{f.sub}</div>
+                      </div>
+                      {i < flow.length - 1 && (
+                        <ArrowRight size={14} className="ml-auto hidden lg:block" style={{ color: "rgba(255,255,255,0.25)" }} />
+                      )}
                     </motion.div>
-                    {i < pipeline.length - 1 && (
-                      <ChevronRight size={16} className="text-gray-300 mx-1 mb-5 shrink-0" />
-                    )}
-                  </React.Fragment>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-
-            {/* CTA */}
-            <button
-              onClick={() => navigate("/login")}
-              className="group inline-flex items-center gap-3 px-10 py-4 rounded-full text-base font-bold text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200"
-              style={{ background: "linear-gradient(135deg, var(--forest-700), var(--forest-500))" }}
-            >
-              Create Estimate
-              <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-
-            <p className="mt-4 text-xs text-gray-400">Takes only a few minutes • No registration needed to explore</p>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

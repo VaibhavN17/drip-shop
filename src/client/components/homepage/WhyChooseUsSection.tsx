@@ -1,86 +1,123 @@
-import React from "react";
+﻿import React from "react";
 import { motion } from "framer-motion";
-import { Package, FileText, BadgePercent, Star, Users, Wrench } from "lucide-react";
+import { Droplets, ShieldCheck, FileText, HeartHandshake, Truck, Award } from "lucide-react";
 
-const benefits = [
-  { icon: Package,      title: "Wide Range of Products",        desc: "Drip pipes, emitters, filters, valves, sprinklers and more from trusted brands." },
-  { icon: FileText,     title: "Transparent Estimates",         desc: "Itemized quotations with per-unit pricing. No hidden charges. Clear and honest." },
-  { icon: BadgePercent, title: "Subsidy Guidance",              desc: "We help you understand government schemes and prepare the right documentation." },
-  { icon: Star,         title: "Product Recommendations",       desc: "Based on your crop, soil, and land area — we suggest the right system for you." },
-  { icon: Users,        title: "Farmer-Focused Support",        desc: "Marathi and Hindi support. We understand local farming needs and challenges." },
-  { icon: Wrench,       title: "Complete Irrigation Solutions", desc: "From planning to product supply — we support you through the entire process." },
+const reasons = [
+  {
+    icon: Droplets,
+    title: "ड्रिप सिंचन तज्ञ",
+    titleEn: "Drip Irrigation Experts",
+    desc: "ड्रिप, स्प्रिंकलर आणि संबंधित सर्व साहित्य उपलब्ध. सरकारी योजनेसाठी अनुभव.",
+    color: "#075985",
+    bg: "#f0f9ff",
+    border: "#bae6fd",
+  },
+  {
+    icon: ShieldCheck,
+    title: "विश्वासार्ह ब्रँड",
+    titleEn: "Trusted Quality",
+    desc: "Finolex, Jain, Netafim आणि इतर विश्वासार्ह ब्रँडचे साहित्य.",
+    color: "#166534",
+    bg: "#f0fdf4",
+    border: "#bbf7d0",
+  },
+  {
+    icon: FileText,
+    title: "अंदाज सेवा",
+    titleEn: "Estimate Service",
+    desc: "शेतीचा आकार आणि पिकाच्या गरजेनुसार अचूक अंदाज PDF स्वरूपात.",
+    color: "#b91c1c",
+    bg: "#fef2f2",
+    border: "#fecaca",
+  },
+  {
+    icon: HeartHandshake,
+    title: "ग्राहक मार्गदर्शन",
+    titleEn: "Customer Guidance",
+    desc: "उत्पादन निवड, स्थापना सल्ला आणि अनुदान कागदपत्रांसाठी मदत.",
+    color: "#92400e",
+    bg: "#fffbeb",
+    border: "#fde68a",
+  },
+  {
+    icon: Truck,
+    title: "डिलिव्हरी सेवा",
+    titleEn: "Delivery Available",
+    desc: "लाख खंडाळा परिसरात होम डिलिव्हरी उपलब्ध. संपर्क करा.",
+    color: "#4d7c0f",
+    bg: "#f7fee7",
+    border: "#d9f99d",
+  },
+  {
+    icon: Award,
+    title: "सरकारी दर",
+    titleEn: "Government Rates",
+    desc: "अनुदान योजनेसाठी मान्यताप्राप्त सरकारी दरात साहित्य उपलब्ध.",
+    color: "#7c3aed",
+    bg: "#faf5ff",
+    border: "#e9d5ff",
+  },
 ];
-
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
-};
-
-const cardVariants = {
-  hidden:  { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.25, 0.1, 0.25, 1] as const } },
-};
 
 export function WhyChooseUsSection() {
   return (
     <section
       id="about"
-      className="homepage-section"
-      style={{ background: "white" }}
+      className="py-20"
+      style={{ background: "#fffdf7" }}
     >
-      <div className="max-w-7xl mx-auto">
-        {/* Heading */}
-        <div className="text-center mb-14">
-          <span
-            className="inline-block px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-4"
-            style={{ background: "var(--forest-100)", color: "var(--forest-700)" }}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-12 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4"
+            style={{ background: "#fef3c7", color: "#92400e", border: "1px solid #fde68a" }}
           >
-            Why Us
-          </span>
-          <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-gray-900 mb-4">
-            Why Farmers
-            <span className="gradient-text"> Choose Us</span>
-          </h2>
-          <p className="text-gray-500 text-lg max-w-xl mx-auto">
-            Service-oriented. Farmer-first. We're not just a shop — we're your irrigation partner.
-          </p>
+            🌟 का निवडावे आम्हाला? / Why Choose Us?
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
+            className="font-black text-3xl sm:text-4xl text-stone-900 leading-tight"
+          >
+            शेतकऱ्यांचे विश्वसनीय दुकान
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
+            className="text-stone-500 mt-2"
+          >
+            The trusted hardware store for Maharashtra farmers
+          </motion.p>
         </div>
 
-        <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-        >
-          {benefits.map((b, i) => {
-            const Icon = b.icon;
+        {/* Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {reasons.map((r, i) => {
+            const Icon = r.icon;
             return (
               <motion.div
-                key={b.title}
-                variants={cardVariants}
-                className="group relative p-7 rounded-2xl border transition-all duration-300 hover:shadow-lg cursor-default"
-                style={{ borderColor: "#e5e7eb", background: "white" }}
-                whileHover={{ borderColor: "var(--forest-300)", y: -4 }}
+                key={r.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.45 }}
+                whileHover={{ y: -5, boxShadow: "0 16px 40px rgba(0,0,0,0.1)" }}
+                className="rounded-2xl p-6 transition-all duration-200"
+                style={{ background: r.bg, border: `1.5px solid ${r.border}` }}
               >
                 <div
-                  className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 transition-colors duration-300 group-hover:bg-forest-100"
-                  style={{ background: "var(--forest-50)" }}
+                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                  style={{ background: "white", boxShadow: `0 4px 12px ${r.border}` }}
                 >
-                  <Icon size={22} style={{ color: "var(--forest-600)" }} />
+                  <Icon size={22} style={{ color: r.color }} />
                 </div>
-                <h3 className="font-display font-bold text-gray-900 text-lg mb-2">{b.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{b.desc}</p>
-
-                {/* Accent bottom border */}
-                <div
-                  className="absolute bottom-0 left-0 right-0 h-0.5 rounded-b-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: "linear-gradient(90deg, var(--forest-400), var(--forest-600))" }}
-                />
+                <h3 className="font-bold text-lg mb-0.5" style={{ color: r.color }}>{r.title}</h3>
+                <p className="text-xs font-medium text-stone-400 mb-2">{r.titleEn}</p>
+                <p className="text-sm text-stone-600 leading-relaxed">{r.desc}</p>
               </motion.div>
             );
           })}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

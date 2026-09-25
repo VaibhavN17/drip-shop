@@ -1,81 +1,83 @@
-import React from "react";
+﻿import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ChevronRight, Phone } from "lucide-react";
+import { Phone, MessageSquare, ArrowRight } from "lucide-react";
+
+const PHONE = "9545467291";
 
 export function FinalCTASection() {
   const navigate = useNavigate();
-
   return (
     <section
-      id="contact"
-      className="relative overflow-hidden"
-      style={{ minHeight: 480 }}
+      className="py-20 relative overflow-hidden"
+      style={{ background: "linear-gradient(135deg, #7f1d1d 0%, #b91c1c 50%, #991b1b 100%)" }}
     >
-      {/* Background image */}
-      <div
-        className="absolute inset-0"
+      <div className="absolute inset-0 opacity-10"
         style={{
-          backgroundImage: "url(/images/hero_farm_bg.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center 40%",
+          backgroundImage: "repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 12px)",
         }}
       />
-      {/* Dark overlay */}
-      <div
-        className="absolute inset-0"
-        style={{ background: "linear-gradient(135deg, rgba(13,40,24,0.92) 0%, rgba(26,71,49,0.82) 100%)" }}
-      />
+      <div className="absolute -left-20 -bottom-20 w-80 h-80 rounded-full opacity-10" style={{ background: "#fbbf24" }} />
 
-      <div className="relative z-10 flex items-center justify-center min-h-[480px] py-20 px-4">
-        <div className="text-center max-w-2xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold mb-6 tracking-widest uppercase"
+          style={{ background: "rgba(251,191,36,0.18)", border: "1px solid rgba(251,191,36,0.35)", color: "#fbbf24" }}
+        >
+          📞 आत्ता संपर्क करा
+        </motion.div>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
+          className="font-black text-3xl sm:text-4xl lg:text-5xl text-white leading-tight mb-4"
+        >
+          शेतीसाठी साहित्य हवे आहे?
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
+          className="text-lg mb-3" style={{ color: "rgba(255,255,255,0.8)" }}
+        >
+          Need irrigation equipment for your farm?
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.25 }}
+          className="text-base mb-10" style={{ color: "rgba(255,255,255,0.6)" }}
+        >
+          आत्ता संपर्क करा, ऑनलाईन अंदाज मिळवा, किंवा सरळ आमच्या दुकानात या.
+          <br />
+          Call now, get an online estimate, or visit us at Lakh Khandala, Maharashtra.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.35 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+        >
+          <a
+            href={`tel:${PHONE}`}
+            className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-full text-base font-bold transition-all hover:scale-105 shadow-2xl"
+            style={{ background: "#fff", color: "#b91c1c" }}
           >
-            <span
-              className="inline-block px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-6"
-              style={{ background: "rgba(125,217,154,0.15)", border: "1px solid rgba(125,217,154,0.3)", color: "#7dd99a" }}
-            >
-              Get Started Today
-            </span>
-
-            <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-white mb-5 leading-tight">
-              Ready to Plan Your
-              <br />
-              <span style={{ color: "#7dd99a" }}>Irrigation System?</span>
-            </h2>
-
-            <p className="text-base leading-relaxed mb-10" style={{ color: "rgba(255,255,255,0.72)" }}>
-              Get a customized estimate for your farm. Our team will help you choose the right products, understand applicable subsidies, and prepare your complete irrigation plan.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
-                onClick={() => navigate("/login")}
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-9 py-4 rounded-full text-base font-bold transition-all duration-200 shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95"
-                style={{ background: "var(--sun-500)", color: "#1a1a1a" }}
-              >
-                Get Estimate
-                <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              <a
-                href="tel:+919999999999"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-9 py-4 rounded-full text-base font-semibold transition-all duration-200 hover:bg-white/15"
-                style={{ border: "2px solid rgba(255,255,255,0.35)", color: "white" }}
-              >
-                <Phone size={16} /> Contact Us
-              </a>
-            </div>
-
-            <p className="mt-8 text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
-              Visit our shop · Maharashtra, India
-            </p>
-          </motion.div>
-        </div>
+            <Phone size={18} /> {PHONE}
+          </a>
+          <a
+            href={`https://wa.me/91${PHONE}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full text-base font-bold transition-all hover:scale-105 shadow-2xl"
+            style={{ background: "#25d366", color: "#fff" }}
+          >
+            <MessageSquare size={18} /> WhatsApp वर संपर्क
+          </a>
+          <button
+            onClick={() => navigate("/admin/login")}
+            className="group inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-bold transition-all hover:scale-105 shadow-2xl"
+            style={{ background: "#fbbf24", color: "#1c0a0a" }}
+          >
+            📋 ऑनलाईन अंदाज
+            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          </button>
+        </motion.div>
       </div>
     </section>
   );

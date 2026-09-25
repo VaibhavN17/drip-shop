@@ -7,6 +7,7 @@ const router = Router();
 router.use(requireAuth);
 
 router.get("/", requirePermission("invoices:read"), invCtrl.list);
+router.post("/", requirePermission("invoices:write"), invCtrl.create);
 router.get("/:id", requirePermission("invoices:read"), invCtrl.getById);
 router.put("/:id", requirePermission("invoices:write"), invCtrl.update);
 

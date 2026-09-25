@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 import { api } from "@/lib/api";
 import { useI18n } from "@/i18n";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Table, THead, TBody, TR, TH, TD } from "@/components/ui/table";
@@ -34,7 +35,14 @@ export default function InvoicesPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-semibold">{t("invoices")}</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-semibold">{t("invoices")}</h1>
+        <Link to="/admin/invoices/new">
+          <Button size="sm" className="bg-blue-700 hover:bg-blue-800 text-white">
+            <Plus size={14} className="mr-1" /> New Tax Invoice / नवीन इन्व्हॉईस
+          </Button>
+        </Link>
+      </div>
 
       <div className="flex flex-wrap gap-2">
         <div className="relative max-w-sm flex-1">
@@ -49,7 +57,7 @@ export default function InvoicesPage() {
         <TBody>
           {data?.map((inv) => (
             <TR key={inv.id}>
-              <TD><Link to={`/invoices/${inv.id}`} className="font-medium text-primary hover:underline">{inv.invoiceNumber}</Link></TD>
+              <TD><Link to={`/admin/invoices/${inv.id}`} className="font-medium text-primary hover:underline">{inv.invoiceNumber}</Link></TD>
               <TD>{inv.customer.fullName} · {inv.customer.mobile}</TD>
               <TD>{formatDate(inv.invoiceDate)}</TD>
               <TD>{formatInr(inv.totalAmount)}</TD>

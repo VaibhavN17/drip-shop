@@ -4,7 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { AppLayout } from "@/components/layout/AppLayout";
 
 import HomePage from "@/pages/HomePage";
-import LoginPage from "@/pages/Login";
+import AdminLoginPage from "@/pages/AdminLogin";
 import DashboardPage from "@/pages/Dashboard";
 import CustomersPage from "@/pages/Customers";
 import CustomerDetailPage from "@/pages/CustomerDetail";
@@ -15,6 +15,7 @@ import QuotationsPage from "@/pages/Quotations";
 import QuotationBuilderPage from "@/pages/QuotationBuilder";
 import QuotationDetailPage from "@/pages/QuotationDetail";
 import InvoicesPage from "@/pages/Invoices";
+import InvoiceBuilderPage from "@/pages/InvoiceBuilder";
 import InvoiceDetailPage from "@/pages/InvoiceDetail";
 import PaymentsPage from "@/pages/Payments";
 import ReportsPage from "@/pages/Reports";
@@ -29,20 +30,30 @@ function RequireAuth({ children }: { children: React.ReactElement }) {
         Loading...
       </div>
     );
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/admin/login" replace />;
   return children;
 }
 
 export default function App() {
   return (
     <Routes>
-      {/* ── Public Routes ── */}
+      {/* ── Public Routes (no auth required) ── */}
       <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
 
-      {/* ── Protected App Routes ── */}
+      {/* ── Admin Login ── */}
+      <Route path="/admin/login" element={<AdminLoginPage />} />
+
+      {/* Legacy /login redirect → /admin/login */}
+      <Route path="/login" element={<Navigate to="/admin/login" replace />} />
+
+      {/* Legacy/Convenience redirects so nested links always route to admin */}
+      <Route path="/quotations/*" element={<Navigate to="/admin/quotations" replace />} />
+      <Route path="/invoices/*" element={<Navigate to="/admin/invoices" replace />} />
+      <Route path="/customers/*" element={<Navigate to="/admin/customers" replace />} />
+
+      {/* ── Protected Admin Routes ── */}
       <Route
-        path="/app"
+        path="/admin"
         element={
           <RequireAuth>
             <AppLayout />
@@ -60,7 +71,9 @@ export default function App() {
         <Route path="quotations/:id" element={<QuotationDetailPage />} />
         <Route path="quotations/:id/edit" element={<QuotationBuilderPage />} />
         <Route path="invoices" element={<InvoicesPage />} />
+        <Route path="invoices/new" element={<InvoiceBuilderPage />} />
         <Route path="invoices/:id" element={<InvoiceDetailPage />} />
+        <Route path="invoices/:id/edit" element={<InvoiceBuilderPage />} />
         <Route path="payments" element={<PaymentsPage />} />
         <Route path="reports" element={<ReportsPage />} />
         <Route path="users" element={<UsersPage />} />

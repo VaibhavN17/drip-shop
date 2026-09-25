@@ -27,7 +27,7 @@ export default function QuotationsPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">{t("quotations")}</h1>
-        <Link to="/quotations/new"><Button size="sm"><Plus size={14} /> {t("newQuotation")}</Button></Link>
+        <Link to="/admin/quotations/new"><Button size="sm"><Plus size={14} /> {t("newQuotation")}</Button></Link>
       </div>
 
       <div className="relative max-w-sm">
@@ -40,7 +40,7 @@ export default function QuotationsPage() {
         <TBody>
           {data?.map((q) => (
             <TR key={q.id}>
-              <TD><Link to={`/quotations/${q.id}`} className="font-medium text-primary hover:underline">{q.quotationNumber}</Link></TD>
+              <TD><Link to={`/admin/quotations/${q.id}`} className="font-medium text-primary hover:underline">{q.quotationNumber}</Link></TD>
               <TD>{q.customer.fullName} · {q.customer.mobile}</TD>
               <TD>{formatDate(q.createdAt)}</TD>
               <TD>{formatInr(q.totalAmount)}</TD>

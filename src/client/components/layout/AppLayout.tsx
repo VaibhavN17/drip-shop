@@ -10,17 +10,17 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { to: "/app",                 icon: LayoutDashboard, label: "dashboard"      as const, end: true },
-  { to: "/app/customers",       icon: Users,           label: "customers"      as const },
-  { to: "/app/products",        icon: Package,         label: "products"       as const },
-  { to: "/app/categories",      icon: Tags,            label: "categories"     as const },
-  { to: "/app/government-rates",icon: Landmark,        label: "governmentRates"as const },
-  { to: "/app/quotations",      icon: FileText,        label: "quotations"     as const },
-  { to: "/app/invoices",        icon: Receipt,         label: "invoices"       as const },
-  { to: "/app/payments",        icon: Wallet,          label: "payments"       as const },
-  { to: "/app/reports",         icon: BarChart3,       label: "reports"        as const },
-  { to: "/app/users",           icon: UserCog,         label: "users"          as const },
-  { to: "/app/settings",        icon: SettingsIcon,    label: "settings"       as const },
+  { to: "/admin",                 icon: LayoutDashboard, label: "dashboard"      as const, end: true },
+  { to: "/admin/customers",       icon: Users,           label: "customers"      as const },
+  { to: "/admin/products",        icon: Package,         label: "products"       as const },
+  { to: "/admin/categories",      icon: Tags,            label: "categories"     as const },
+  { to: "/admin/government-rates",icon: Landmark,        label: "governmentRates"as const },
+  { to: "/admin/quotations",      icon: FileText,        label: "quotations"     as const },
+  { to: "/admin/invoices",        icon: Receipt,         label: "invoices"       as const },
+  { to: "/admin/payments",        icon: Wallet,          label: "payments"       as const },
+  { to: "/admin/reports",         icon: BarChart3,       label: "reports"        as const },
+  { to: "/admin/users",           icon: UserCog,         label: "users"          as const },
+  { to: "/admin/settings",        icon: SettingsIcon,    label: "settings"       as const },
 ];
 
 export function AppLayout() {

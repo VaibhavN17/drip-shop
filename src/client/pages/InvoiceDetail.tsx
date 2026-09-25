@@ -62,6 +62,7 @@ export default function InvoiceDetailPage() {
     window.open(URL.createObjectURL(blob), "_blank");
   }
   function shareOnWhatsApp() {
+    if (!data) return;
     const message = `Invoice ${data.invoiceNumber} for ${data.customer.fullName} — Total: ${formatInr(data.totalAmount)}, Balance: ${formatInr(data.balanceAmount)}.`;
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
   }
@@ -71,7 +72,7 @@ export default function InvoiceDetailPage() {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h1 className="text-xl font-semibold">{data.invoiceNumber}</h1>
-          <Link to={`/customers/${data.customer.id}`} className="text-sm text-primary hover:underline">{data.customer.fullName} · {data.customer.mobile}</Link>
+          <Link to={`/admin/customers/${data.customer.id}`} className="text-sm text-primary hover:underline">{data.customer.fullName} · {data.customer.mobile}</Link>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={openPdf}><FileDown size={14} /> {t("downloadPdf")}</Button>

@@ -74,26 +74,82 @@ export const quotationItemSchema = z.object({
   unit: z.string().min(1),
   governmentRate: z.number().nonnegative().optional().nullable(),
   sellingRate: z.number().nonnegative(),
-  gstRate: z.number().min(0).max(100).default(18),
+  gstRate: z.number().min(0).max(100).default(5),
+});
+
+export const inlineCustomerSchema = z.object({
+  fullName: z.string().min(1),
+  mobile: z.string().min(10).max(15),
+  village: z.string().optional().nullable(),
+  taluka: z.string().optional().nullable(),
+  district: z.string().optional().nullable(),
+  surveyNumber: z.string().optional().nullable(),
+  gatNumber: z.string().optional().nullable(),
+  aadhar: z.string().optional().nullable(),
+  landArea: z.number().nonnegative().optional().nullable(),
+  crop: z.string().optional().nullable(),
+  spacing: z.string().optional().nullable(),
 });
 
 export const quotationSchema = z.object({
-  customerId: z.string().uuid(),
+  customerId: z.string().uuid().optional().nullable(),
+  customer: inlineCustomerSchema.optional().nullable(),
   quotationDate: z.coerce.date().optional(),
   validUntil: z.coerce.date().optional().nullable(),
   schemeId: z.string().uuid().optional().nullable(),
   subsidyPercentage: z.number().min(0).max(100).optional().nullable(),
   isSubsidyBased: z.boolean().default(false),
   landArea: z.number().nonnegative().optional().nullable(),
+  spacing: z.string().optional().nullable(),
+  crop: z.string().optional().nullable(),
   fileExpense: z.number().nonnegative().default(0),
   otherCharges: z.number().nonnegative().default(0),
-  gstRate: z.number().min(0).max(100).default(18),
+  gstRate: z.number().min(0).max(100).default(5),
   notes: z.string().optional().nullable(),
   items: z.array(quotationItemSchema).min(1),
+}).refine((data) => data.customerId || data.customer, {
+  message: "Either customerId or customer details must be provided",
+  path: ["customerId"],
 });
 
 export const quotationStatusSchema = z.object({
   status: z.enum(["DRAFT", "SENT", "APPROVED", "REJECTED", "EXPIRED", "CONVERTED"]),
+});
+
+export const invoiceItemSchema = z.object({
+  productId: z.string().uuid().optional().nullable(),
+  description: z.string().min(1),
+  hsnCode: z.string().optional().nullable(),
+  batchNo: z.string().optional().nullable(),
+  cmlNo: z.string().optional().nullable(),
+  size: z.string().optional().nullable(),
+  quantity: z.number().positive(),
+  unit: z.string().min(1).default("Nos"),
+  govRate: z.number().nonnegative().optional().nullable(),
+  rate: z.number().nonnegative(),
+  taxableValue: z.number().nonnegative().optional(),
+  gstRate: z.number().min(0).max(100).default(5),
+});
+
+export const invoiceCreateSchema = z.object({
+  customerId: z.string().uuid().optional().nullable(),
+  customer: inlineCustomerSchema.optional().nullable(),
+  quotationId: z.string().uuid().optional().nullable(),
+  invoiceDate: z.coerce.date().optional(),
+  setType: z.string().optional().nullable(), // "तुषार" or "ठिबक"
+  spacing: z.string().optional().nullable(),
+  crop: z.string().optional().nullable(),
+  shiwar: z.string().optional().nullable(),
+  discount: z.number().nonnegative().default(0),
+  installation: z.number().nonnegative().default(0),
+  roundOff: z.number().default(0),
+  gstRate: z.number().min(0).max(100).default(5),
+  isInterstate: z.boolean().default(false),
+  notes: z.string().optional().nullable(),
+  items: z.array(invoiceItemSchema).min(1),
+}).refine((data) => data.customerId || data.customer, {
+  message: "Either customerId or customer details must be provided",
+  path: ["customerId"],
 });
 
 export const invoiceUpdateSchema = z.object({

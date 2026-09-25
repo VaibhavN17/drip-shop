@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import { createHash } from "crypto";
 import type { Role } from "@shared/types";
 
 export interface AccessTokenPayload {
@@ -20,11 +21,11 @@ const REFRESH_SECRET = () => {
 };
 
 export function signAccessToken(payload: AccessTokenPayload): string {
-  return jwt.sign(payload, ACCESS_SECRET(), { expiresIn: process.env.JWT_ACCESS_TTL || "15m" });
+  return jwt.sign(payload, ACCESS_SECRET(), { expiresIn: (process.env.JWT_ACCESS_TTL || "15m") as any });
 }
 
 export function signRefreshToken(userId: string): string {
-  return jwt.sign({ sub: userId }, REFRESH_SECRET(), { expiresIn: process.env.JWT_REFRESH_TTL || "7d" });
+  return jwt.sign({ sub: userId }, REFRESH_SECRET(), { expiresIn: (process.env.JWT_REFRESH_TTL || "7d") as any });
 }
 
 export function verifyAccessToken(token: string): AccessTokenPayload {
@@ -47,5 +48,5 @@ export async function verifyPassword(plain: string, hash: string): Promise<boole
 export function hashToken(token: string): string {
   // Cheap non-cryptographic-purpose hash is fine here since the token itself
   // is already a high-entropy signed JWT; bcrypt would be overkill/slow.
-  return require("crypto").createHash("sha256").update(token).digest("hex");
+  return createHash("sha256").update(token).digest("hex");
 }

@@ -83,7 +83,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-2">
             {data.recentQuotations.map((q) => (
-              <Link key={q.id} to={`/quotations/${q.id}`} className="flex items-center justify-between rounded-md p-2 text-sm hover:bg-muted">
+              <Link key={q.id} to={`/admin/quotations/${q.id}`} className="flex items-center justify-between rounded-md p-2 text-sm hover:bg-muted">
                 <span>{q.quotationNumber} — {q.customer.fullName}</span>
                 <span className="flex items-center gap-2">
                   {formatInr(q.totalAmount)}
@@ -100,7 +100,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-2">
             {data.recentInvoices.map((inv) => (
-              <Link key={inv.id} to={`/invoices/${inv.id}`} className="flex items-center justify-between rounded-md p-2 text-sm hover:bg-muted">
+              <Link key={inv.id} to={`/admin/invoices/${inv.id}`} className="flex items-center justify-between rounded-md p-2 text-sm hover:bg-muted">
                 <span>{inv.invoiceNumber} — {inv.customer.fullName}</span>
                 <span className="flex items-center gap-2">
                   {formatInr(inv.totalAmount)}

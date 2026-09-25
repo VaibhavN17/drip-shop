@@ -41,12 +41,12 @@ export default function QuotationDetailPage() {
 
   const duplicateMutation = useMutation({
     mutationFn: () => api.post<{ id: string }>(`/quotations/${id}/duplicate`),
-    onSuccess: (res) => navigate(`/quotations/${res.id}`),
+    onSuccess: (res) => navigate(`/admin/quotations/${res.id}`),
   });
 
   const convertMutation = useMutation({
     mutationFn: () => api.post<{ id: string }>(`/quotations/${id}/convert-to-invoice`, { isInterstate: false }),
-    onSuccess: (res) => navigate(`/invoices/${res.id}`),
+    onSuccess: (res) => navigate(`/admin/invoices/${res.id}`),
   });
 
   if (!data) return <div className="text-muted-foreground">Loading...</div>;
@@ -61,6 +61,7 @@ export default function QuotationDetailPage() {
   }
 
   function shareOnWhatsApp() {
+    if (!data) return;
     const message = `Quotation ${data.quotationNumber} for ${data.customer.fullName} — Total: ${formatInr(data.totalAmount)}. Please find the PDF attached (downloaded separately).`;
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
   }
@@ -70,7 +71,7 @@ export default function QuotationDetailPage() {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h1 className="text-xl font-semibold">{data.quotationNumber}</h1>
-          <Link to={`/customers/${data.customer.id}`} className="text-sm text-primary hover:underline">{data.customer.fullName} · {data.customer.mobile}</Link>
+          <Link to={`/admin/customers/${data.customer.id}`} className="text-sm text-primary hover:underline">{data.customer.fullName} · {data.customer.mobile}</Link>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Select
@@ -87,7 +88,7 @@ export default function QuotationDetailPage() {
             <Button size="sm" onClick={() => convertMutation.mutate()}><ArrowRightCircle size={14} /> {t("convertToInvoice")}</Button>
           )}
           {data.status !== "CONVERTED" && (
-            <Link to={`/quotations/${id}/edit`}><Button variant="outline" size="sm">{t("edit")}</Button></Link>
+            <Link to={`/admin/quotations/${id}/edit`}><Button variant="outline" size="sm">{t("edit")}</Button></Link>
           )}
         </div>
       </div>

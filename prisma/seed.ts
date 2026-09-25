@@ -15,27 +15,29 @@ async function main() {
   console.log("Seeding...");
 
   // --- Shop settings ---
+  const settingsData = {
+    shopName: "शेतकरी राजा मोरे हार्डवेअर (सोना इरिगेशन)",
+    address: "लाख खंडाळा, ता. वैजापूर, जि. छत्रपती संभाजीनगर",
+    mobile: "8766420075, 8888309342, 9545595944",
+    gstin: "27ABVPT3736N1Z9",
+    state: "27 - Maharashtra",
+    invoicePrefix: "INV",
+    quotationPrefix: "QTN",
+    defaultGstRate: 5,
+    defaultSubsidyPct: 80,
+    footerText: "सदर बिलाचा आर्थिक व्यवहार शेतकरी व वितरक यांच्यामध्ये झालेला असून, त्यासाठी वितरक जबाबदार आहे.",
+    termsAndConditions: "किंमती पूर्वसूचना न देता बदलू शकतात. विकलेला माल परत घेतला जाणार नाही. मालाची वॉरंटी कंपनी नियमानुसार राहील.",
+  };
+
   const existingSettings = await prisma.shopSettings.findFirst();
   if (!existingSettings) {
-    await prisma.shopSettings.create({
-      data: {
-        shopName: "Sample Drip Irrigation Shop",
-        address: "Main Road, Taluka, District, Maharashtra",
-        mobile: "9876543210",
-        gstin: "27AAAAA0000A1Z5",
-        state: "Maharashtra",
-        invoicePrefix: "INV",
-        quotationPrefix: "QTN",
-        defaultGstRate: 18,
-        defaultSubsidyPct: 80,
-        footerText: "Thank you for your business.",
-        termsAndConditions: "Prices are subject to change without prior notice. Goods once sold will not be taken back.",
-      },
-    });
+    await prisma.shopSettings.create({ data: settingsData });
+  } else {
+    await prisma.shopSettings.update({ where: { id: existingSettings.id }, data: settingsData });
   }
 
   // --- Owner user ---
-  const ownerExists = await prisma.user.findUnique({ where: { username: "owner" } });
+  const ownerExists = await prisma.user.findUnique({ where: { username: "themorevaibhav@gmail.com" } });
   if (!ownerExists) {
     const passwordHash = await bcrypt.hash("ChangeMe123!", 12);
     await prisma.user.create({

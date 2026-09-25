@@ -22,7 +22,7 @@ export async function quotationPdf(req: AuthedRequest, res: Response, next: Next
     const shop = await getShop();
 
     const buffer = await renderToBuffer(
-      React.createElement(QuotationPdfDocument, {
+      React.createElement(QuotationPdfDocument as any, {
         shop,
         quotation: {
           quotationNumber: quotation.quotationNumber,
@@ -40,8 +40,12 @@ export async function quotationPdf(req: AuthedRequest, res: Response, next: Next
           subsidyAmount: quotation.subsidyAmount ? Number(quotation.subsidyAmount) : null,
           farmerContribution: quotation.farmerContribution ? Number(quotation.farmerContribution) : null,
           landArea: quotation.landArea ? Number(quotation.landArea) : null,
+          notes: quotation.notes,
         },
-        customer: quotation.customer,
+        customer: {
+          ...quotation.customer,
+          landArea: quotation.customer.landArea ? Number(quotation.customer.landArea) : null,
+        },
         items: quotation.items.map((i) => ({
           description: i.description,
           quantity: Number(i.quantity),
@@ -49,7 +53,7 @@ export async function quotationPdf(req: AuthedRequest, res: Response, next: Next
           sellingRate: Number(i.sellingRate),
           amount: Number(i.amount),
         })),
-      })
+      } as any) as any
     );
 
     res.setHeader("Content-Type", "application/pdf");
@@ -70,7 +74,7 @@ export async function invoicePdf(req: AuthedRequest, res: Response, next: NextFu
     const shop = await getShop();
 
     const buffer = await renderToBuffer(
-      React.createElement(InvoicePdfDocument, {
+      React.createElement(InvoicePdfDocument as any, {
         shop,
         invoice: {
           invoiceNumber: invoice.invoiceNumber,
@@ -83,8 +87,13 @@ export async function invoicePdf(req: AuthedRequest, res: Response, next: NextFu
           discount: Number(invoice.discount),
           roundOff: Number(invoice.roundOff),
           totalAmount: Number(invoice.totalAmount),
+          gstRate: Number(invoice.gstRate),
+          notes: invoice.notes,
         },
-        customer: invoice.customer,
+        customer: {
+          ...invoice.customer,
+          landArea: invoice.customer.landArea ? Number(invoice.customer.landArea) : null,
+        },
         items: invoice.items.map((i) => ({
           description: i.description,
           hsnCode: i.hsnCode,
@@ -96,7 +105,7 @@ export async function invoicePdf(req: AuthedRequest, res: Response, next: NextFu
           sgstAmount: Number(i.sgstAmount),
           totalAmount: Number(i.totalAmount),
         })),
-      })
+      } as any) as any
     );
 
     res.setHeader("Content-Type", "application/pdf");

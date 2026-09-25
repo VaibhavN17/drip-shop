@@ -134,7 +134,7 @@ export default function CustomersPage() {
             <TR key={c.id}>
               <TD>{c.customerCode}</TD>
               <TD>
-                <Link to={`/customers/${c.id}`} className="font-medium text-primary hover:underline">{c.fullName}</Link>
+                <Link to={`/admin/customers/${c.id}`} className="font-medium text-primary hover:underline">{c.fullName}</Link>
               </TD>
               <TD>{c.mobile}</TD>
               <TD>{c.village ?? "-"}</TD>

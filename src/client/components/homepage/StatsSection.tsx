@@ -1,86 +1,60 @@
-import React, { useEffect, useRef, useState } from "react";
+﻿import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 const stats = [
-  { value: 500,  suffix: "+", label: "Farmers Served",     icon: "👨‍🌾" },
-  { value: 1000, suffix: "+", label: "Estimates Created",  icon: "📋" },
-  { value: 50,   suffix: "+", label: "Products Available", icon: "📦" },
-  { value: 10,   suffix: "+", label: "Irrigation Solutions",icon: "💧" },
+  { value: 500,  suffix: "+", label: "शेतकरी ग्राहक",   labelEn: "Farmer Customers" },
+  { value: 1000, suffix: "+", label: "यशस्वी प्रकल्प",   labelEn: "Successful Projects" },
+  { value: 50,   suffix: "+", label: "उत्पादन प्रकार",   labelEn: "Product Types" },
+  { value: 10,   suffix: "+", label: "वर्षांचा अनुभव",   labelEn: "Years Experience" },
 ];
 
-function useCountUp(target: number, duration = 1800, active: boolean) {
+function Counter({ target, suffix }: { target: number; suffix: string }) {
   const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!active) return;
-    let start = 0;
-    const step = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= target) { setCount(target); clearInterval(timer); }
-      else setCount(Math.floor(start));
-    }, 16);
-    return () => clearInterval(timer);
-  }, [active, target, duration]);
-  return count;
-}
+  const ref = useRef<HTMLDivElement>(null);
+  const started = useRef(false);
 
-function StatCard({ stat, active }: { stat: typeof stats[0]; active: boolean }) {
-  const count = useCountUp(stat.value, 1600, active);
-  return (
-    <div className="flex flex-col items-center text-center p-6">
-      <div className="text-4xl mb-3">{stat.icon}</div>
-      <div className="font-display font-black text-4xl sm:text-5xl mb-2" style={{ color: "var(--forest-600)" }}>
-        {count.toLocaleString("en-IN")}{stat.suffix}
-      </div>
-      <div className="text-sm font-medium text-gray-500">{stat.label}</div>
-    </div>
-  );
+  useEffect(() => {
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started.current) {
+        started.current = true;
+        let start = 0;
+        const step = Math.ceil(target / 40);
+        const timer = setInterval(() => {
+          start += step;
+          if (start >= target) { setCount(target); clearInterval(timer); }
+          else setCount(start);
+        }, 30);
+      }
+    }, { threshold: 0.5 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [target]);
+
+  return <div ref={ref} className="text-4xl sm:text-5xl font-black">{count}{suffix}</div>;
 }
 
 export function StatsSection() {
-  const [active, setActive] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setActive(true); observer.disconnect(); } },
-      { threshold: 0.4 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section
-      ref={ref}
-      className="homepage-section"
-      style={{ background: "var(--forest-50)" }}
-    >
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="font-display font-black text-3xl sm:text-4xl text-gray-900">
-            Trusted by Farmers
-            <span className="gradient-text"> Across Maharashtra</span>
-          </h2>
-        </div>
-
-        <motion.div
-          className="grid grid-cols-2 lg:grid-cols-4 gap-6"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          {stats.map((stat, i) => (
-            <div
-              key={stat.label}
-              className="bg-white rounded-2xl shadow-sm border"
-              style={{ borderColor: "var(--forest-100)" }}
+    <section style={{ background: "#1c0a0a" }} className="py-14">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {stats.map((s, i) => (
+            <motion.div
+              key={s.label}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="text-center"
             >
-              <StatCard stat={stat} active={active} />
-            </div>
+              <div style={{ color: "#fbbf24" }}>
+                <Counter target={s.value} suffix={s.suffix} />
+              </div>
+              <div className="text-white font-semibold mt-1 text-sm">{s.label}</div>
+              <div className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.4)" }}>{s.labelEn}</div>
+            </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

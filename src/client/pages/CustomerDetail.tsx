@@ -62,7 +62,7 @@ export default function CustomerDetailPage() {
           <CardHeader><CardTitle>Quotation History</CardTitle></CardHeader>
           <CardContent className="space-y-2">
             {data.quotations.map((q) => (
-              <Link key={q.id} to={`/quotations/${q.id}`} className="flex items-center justify-between rounded-md p-2 text-sm hover:bg-muted">
+              <Link key={q.id} to={`/admin/quotations/${q.id}`} className="flex items-center justify-between rounded-md p-2 text-sm hover:bg-muted">
                 <span>{q.quotationNumber} · {formatDate(q.createdAt)}</span>
                 <span className="flex items-center gap-2">{formatInr(q.totalAmount)}<Badge status={q.status}>{q.status}</Badge></span>
               </Link>
@@ -74,7 +74,7 @@ export default function CustomerDetailPage() {
           <CardHeader><CardTitle>Invoice & Payment History</CardTitle></CardHeader>
           <CardContent className="space-y-2">
             {data.invoices.map((inv) => (
-              <Link key={inv.id} to={`/invoices/${inv.id}`} className="flex items-center justify-between rounded-md p-2 text-sm hover:bg-muted">
+              <Link key={inv.id} to={`/admin/invoices/${inv.id}`} className="flex items-center justify-between rounded-md p-2 text-sm hover:bg-muted">
                 <span>{inv.invoiceNumber} · {formatDate(inv.createdAt)}</span>
                 <span className="flex items-center gap-2">
                   {formatInr(inv.totalAmount)}

@@ -1,7 +1,7 @@
 import type { Response, NextFunction } from "express";
 import { prisma } from "@server/db/client";
 import { quotationSchema, quotationStatusSchema, paginationSchema } from "@server/validators/schemas";
-import { generateQuotationNumber, generateInvoiceNumber } from "@server/services/numbering.service";
+import { generateQuotationNumber, generateInvoiceNumber, generateCustomerCode } from "@server/services/numbering.service";
 import { calculateItemTotals, calculateSubsidy, calculateGst } from "@server/services/subsidy.service";
 import { AppError } from "@server/utils/errors";
 import { ok, created } from "@server/utils/response";
@@ -104,11 +104,50 @@ export async function getById(req: AuthedRequest, res: Response, next: NextFunct
   }
 }
 
+async function resolveCustomerId(input: { customerId?: string | null; customer?: any; userId?: string }): Promise<string> {
+  if (input.customerId) return input.customerId;
+  if (!input.customer) throw AppError.badRequest("Customer details required");
+
+  // Check if customer exists by mobile
+  const existing = await prisma.customer.findFirst({ where: { mobile: input.customer.mobile } });
+  if (existing) {
+    // Optionally update fields if empty
+    return existing.id;
+  }
+
+  const customerCode = await generateCustomerCode();
+  const aadhar = input.customer.aadhar?.replace(/\s+/g, "");
+  const createdCust = await prisma.customer.create({
+    data: {
+      customerCode,
+      fullName: input.customer.fullName,
+      mobile: input.customer.mobile,
+      village: input.customer.village ?? null,
+      taluka: input.customer.taluka ?? null,
+      district: input.customer.district ?? null,
+      surveyNumber: input.customer.surveyNumber ?? null,
+      gatNumber: input.customer.gatNumber ?? null,
+      landArea: input.customer.landArea ? Number(input.customer.landArea) : null,
+      crop: input.customer.crop ?? null,
+      aadhaarLast4: aadhar && aadhar.length >= 4 ? aadhar.slice(-4) : null,
+      notes: input.customer.aadhar ? `Aadhaar: ${input.customer.aadhar}` : null,
+      createdById: input.userId,
+    },
+  });
+  return createdCust.id;
+}
+
 export async function create(req: AuthedRequest, res: Response, next: NextFunction) {
   try {
     const data = quotationSchema.parse(req.body);
     const { quotationPrefix } = await getShopDefaults();
     const quotationNumber = await generateQuotationNumber(quotationPrefix);
+
+    const customerId = await resolveCustomerId({
+      customerId: data.customerId,
+      customer: data.customer,
+      userId: req.user?.id,
+    });
 
     const calc = await recalculate({
       items: data.items,
@@ -120,10 +159,20 @@ export async function create(req: AuthedRequest, res: Response, next: NextFuncti
       schemeId: data.schemeId,
     });
 
+    // Format notes to include spacing / crop metadata if provided
+    let combinedNotes = data.notes ?? "";
+    const metaParts: string[] = [];
+    if (data.spacing) metaParts.push(`लागवडीचे अंतर (Spacing): ${data.spacing}`);
+    if (data.crop) metaParts.push(`पिक (Crop): ${data.crop}`);
+    if (data.customer?.aadhar) metaParts.push(`Aadhaar: ${data.customer.aadhar}`);
+    if (metaParts.length > 0) {
+      combinedNotes = combinedNotes ? `${combinedNotes} | ${metaParts.join(" | ")}` : metaParts.join(" | ");
+    }
+
     const quotation = await prisma.quotation.create({
       data: {
         quotationNumber,
-        customerId: data.customerId,
+        customerId,
         quotationDate: data.quotationDate ?? new Date(),
         validUntil: data.validUntil,
         schemeId: data.schemeId,
@@ -141,7 +190,7 @@ export async function create(req: AuthedRequest, res: Response, next: NextFuncti
         subsidyAmount: calc.subsidy.subsidyAmount,
         farmerContribution: calc.subsidy.farmerContribution,
         nonEligibleAmount: calc.subsidy.nonEligibleAmount,
-        notes: data.notes,
+        notes: combinedNotes || null,
         createdById: req.user?.id,
         items: {
           create: data.items.map((item, idx) => ({
@@ -176,6 +225,12 @@ export async function update(req: AuthedRequest, res: Response, next: NextFuncti
     }
 
     const data = quotationSchema.parse(req.body);
+    const customerId = await resolveCustomerId({
+      customerId: data.customerId,
+      customer: data.customer,
+      userId: req.user?.id,
+    });
+
     const calc = await recalculate({
       items: data.items,
       isSubsidyBased: data.isSubsidyBased,
@@ -191,7 +246,7 @@ export async function update(req: AuthedRequest, res: Response, next: NextFuncti
       return tx.quotation.update({
         where: { id: req.params.id },
         data: {
-          customerId: data.customerId,
+          customerId,
           quotationDate: data.quotationDate,
           validUntil: data.validUntil,
           schemeId: data.schemeId,
