@@ -894,6 +894,30 @@ export default function MiniSprinklerQuotationBuilderPage() {
           </Button>
         </div>
       </div>
+
+      {/* Mobile Floating Sticky Bottom Action Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-between border-t border-slate-300 bg-white/95 backdrop-blur-md px-4 py-2.5 shadow-2xl md:hidden">
+        <div>
+          <div className="text-[10px] uppercase font-bold text-slate-500">
+            GRAND TOTAL
+          </div>
+          <div className="text-base font-extrabold text-emerald-900 leading-tight">
+            ₹{calculation.grandTotal.toFixed(0)}
+          </div>
+          <div className="text-[10px] text-slate-600">
+            शेतकरी हिस्सा: ₹{calculation.farmerShare}
+          </div>
+        </div>
+
+        <Button
+          size="sm"
+          onClick={handleSave}
+          disabled={!isFarmerReady || !items.length || saveMutation.isPending}
+          className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-5 py-2 text-xs shadow-md"
+        >
+          {saveMutation.isPending ? "जतन होत आहे..." : "कोटेशन जतन करा"}
+        </Button>
+      </div>
     </div>
   );
 }
