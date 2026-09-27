@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm run build:web && npx prisma generate",
+  "buildCommand": "npm run build:web && npx prisma generate && npm run build:server",
   "outputDirectory": "dist",
   "framework": null,
   "rewrites": [
@@ -8,7 +8,7 @@
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "functions": {
-    "api/index.ts": {
+    "api/index.js": {
       "memory": 1024,
       "maxDuration": 15
     }
