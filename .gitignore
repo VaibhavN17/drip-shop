@@ -9,3 +9,4 @@ dist-server
 *.log
 .vercel
 prisma/dev.db
+*.tsbuildinfo

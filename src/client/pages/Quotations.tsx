@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Droplets, FileText } from "lucide-react";
 import { api } from "@/lib/api";
 import { useI18n } from "@/i18n";
 import { Button } from "@/components/ui/button";
@@ -25,9 +25,20 @@ export default function QuotationsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-xl font-semibold">{t("quotations")}</h1>
-        <Link to="/admin/quotations/new"><Button size="sm"><Plus size={14} /> {t("newQuotation")}</Button></Link>
+        <div className="flex flex-wrap gap-2">
+          <Link to="/admin/quotations/new-mini-sprinkler">
+            <Button size="sm" className="bg-emerald-700 hover:bg-emerald-800 text-white gap-1.5 shadow-xs">
+              <Plus size={14} /><Droplets size={13} /> मिनी स्प्रिंकलर Quotation (1-Click 1 Acre)
+            </Button>
+          </Link>
+          <Link to="/admin/quotations/new">
+            <Button size="sm" variant="outline" className="gap-1.5">
+              <Plus size={14} /><FileText size={13} /> ठिबक / Standard Quotation
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div className="relative max-w-sm">

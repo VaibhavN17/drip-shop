@@ -13,9 +13,12 @@ import CategoriesPage from "@/pages/Categories";
 import GovernmentRatesPage from "@/pages/GovernmentRates";
 import QuotationsPage from "@/pages/Quotations";
 import QuotationBuilderPage from "@/pages/QuotationBuilder";
+import MiniSprinklerQuotationBuilderPage from "@/pages/MiniSprinklerQuotationBuilder";
 import QuotationDetailPage from "@/pages/QuotationDetail";
 import InvoicesPage from "@/pages/Invoices";
 import InvoiceBuilderPage from "@/pages/InvoiceBuilder";
+import MiniSprinklerInvoiceBuilderPage from "@/pages/MiniSprinklerInvoiceBuilder";
+import RegularInvoiceBuilderPage from "@/pages/RegularInvoiceBuilder";
 import InvoiceDetailPage from "@/pages/InvoiceDetail";
 import PaymentsPage from "@/pages/Payments";
 import ReportsPage from "@/pages/Reports";
@@ -68,10 +71,13 @@ export default function App() {
         <Route path="government-rates" element={<GovernmentRatesPage />} />
         <Route path="quotations" element={<QuotationsPage />} />
         <Route path="quotations/new" element={<QuotationBuilderPage />} />
+        <Route path="quotations/new-mini-sprinkler" element={<MiniSprinklerQuotationBuilderPage />} />
         <Route path="quotations/:id" element={<QuotationDetailPage />} />
         <Route path="quotations/:id/edit" element={<QuotationBuilderPage />} />
         <Route path="invoices" element={<InvoicesPage />} />
         <Route path="invoices/new" element={<InvoiceBuilderPage />} />
+        <Route path="invoices/new-mini-sprinkler" element={<MiniSprinklerInvoiceBuilderPage />} />
+        <Route path="invoices/new-regular" element={<RegularInvoiceBuilderPage />} />
         <Route path="invoices/:id" element={<InvoiceDetailPage />} />
         <Route path="invoices/:id/edit" element={<InvoiceBuilderPage />} />
         <Route path="payments" element={<PaymentsPage />} />

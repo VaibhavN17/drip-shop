@@ -1,13 +1,17 @@
-﻿import React from "react";
+import React from "react";
 import { Navbar }                   from "@/components/homepage/Navbar";
 import { HeroSection }              from "@/components/homepage/HeroSection";
 import { TrustStrip }               from "@/components/homepage/TrustStrip";
 import { ProductCategoriesSection } from "@/components/homepage/ProductCategoriesSection";
+import { ProductShowcaseSection }   from "@/components/homepage/ProductShowcaseSection";
+import { IrrigationFlowSection }    from "@/components/homepage/IrrigationFlowSection";
+import { HowItWorksSection }        from "@/components/homepage/HowItWorksSection";
 import { SubsidySection }           from "@/components/homepage/SubsidySection";
 import { EstimateCTASection }       from "@/components/homepage/EstimateCTASection";
 import { WhyChooseUsSection }       from "@/components/homepage/WhyChooseUsSection";
 import { StatsSection }             from "@/components/homepage/StatsSection";
 import { FarmerVisualSection }      from "@/components/homepage/FarmerVisualSection";
+import { FAQSection }               from "@/components/homepage/FAQSection";
 import { FinalCTASection }          from "@/components/homepage/FinalCTASection";
 import { Footer }                   from "@/components/homepage/Footer";
 
@@ -29,22 +33,34 @@ export default function HomePage() {
       {/* 3. Product Categories */}
       <ProductCategoriesSection />
 
-      {/* 4. Government Subsidy */}
+      {/* 4. Popular Products horizontal carousel */}
+      <ProductShowcaseSection />
+
+      {/* 5. Irrigation system flow diagram */}
+      <IrrigationFlowSection />
+
+      {/* 6. 4-step "How It Works" process */}
+      <HowItWorksSection />
+
+      {/* 7. Government Subsidy */}
       <SubsidySection />
 
-      {/* 5. Estimate CTA */}
+      {/* 8. Estimate CTA */}
       <EstimateCTASection />
 
-      {/* 6. Why Choose Us */}
+      {/* 9. Why Choose Us */}
       <WhyChooseUsSection />
 
-      {/* 7. Stats counter */}
+      {/* 10. Stats counter */}
       <StatsSection />
 
-      {/* 8. Real Shop Section with contact */}
+      {/* 11. Real Shop Section with contact */}
       <FarmerVisualSection />
 
-      {/* 9. Final CTA */}
+      {/* 12. FAQ accordion */}
+      <FAQSection />
+
+      {/* 13. Final CTA */}
       <FinalCTASection />
 
       {/* Footer with contact details */}
