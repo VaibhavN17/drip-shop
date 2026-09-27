@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { AppLayout } from "@/components/layout/AppLayout";
 
@@ -27,13 +27,14 @@ import SettingsPage from "@/pages/Settings";
 
 function RequireAuth({ children }: { children: React.ReactElement }) {
   const { user, loading } = useAuth();
+  const location = useLocation();
   if (loading)
     return (
       <div className="flex h-screen items-center justify-center text-muted-foreground">
         Loading...
       </div>
     );
-  if (!user) return <Navigate to="/admin/login" replace />;
+  if (!user) return <Navigate to="/admin/login" state={{ from: location }} replace />;
   return children;
 }
 

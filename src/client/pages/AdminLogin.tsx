@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { ApiClientError } from "@/lib/api";
 import { Droplets, Lock, User, Eye, EyeOff } from "lucide-react";
@@ -7,14 +7,17 @@ import { Droplets, Lock, User, Eye, EyeOff } from "lucide-react";
 export default function AdminLoginPage() {
   const { user, login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = (location.state as any)?.from?.pathname || "/admin";
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Already logged in → go to admin dashboard
-  if (user) return <Navigate to="/admin" replace />;
+  // Already logged in → go to requested URL or admin dashboard
+  if (user) return <Navigate to={from} replace />;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,7 +25,7 @@ export default function AdminLoginPage() {
     setLoading(true);
     try {
       await login(username, password);
-      navigate("/admin");
+      navigate(from, { replace: true });
     } catch (err) {
       setError(err instanceof ApiClientError ? err.message : "Invalid credentials. Please try again.");
     } finally {
